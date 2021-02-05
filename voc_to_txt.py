@@ -8,10 +8,7 @@ import sys
 import os
 import glob
 import xml.etree.ElementTree as ET
-
-if __name__ == '__main__':
-    outfile = './test/aircraft_79.txt'
-    xml = "./test/aircraft_79.xml"
+def voc_to_txt(xml,outfile):
     with open(outfile, "w") as new_f:
         root = ET.parse(xml).getroot()
         filename = root.find('filename').text
@@ -32,3 +29,7 @@ if __name__ == '__main__':
             bottom = bndbox.find('ymax').text
             new_f.write("%s,%s,%s,%s,%s " % (left, top, right, bottom,obj_name))
         new_f.write('\n')
+if __name__ == '__main__':
+    xml = "./test/aircraft_79.xml"
+    outfile = './test/aircraft_79.txt'
+    voc_to_txt(xml,outfile)
