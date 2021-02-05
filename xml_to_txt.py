@@ -2,13 +2,13 @@
 # @Time : 2021/2/4 23:03
 # @Author : lzq
 # @Site : 
-# @File : voc_to_txt.py
+# @File : xml_to_txt.py
 # @Software: PyCharm Community Edition 
 import sys
 import os
 import glob
 import xml.etree.ElementTree as ET
-def voc_to_txt(xml,outfile):
+def xml_to_txt(xml,outfile):
     with open(outfile, "w") as new_f:
         root = ET.parse(xml).getroot()
         filename = root.find('filename').text
@@ -32,4 +32,4 @@ def voc_to_txt(xml,outfile):
 if __name__ == '__main__':
     xml = "./test/aircraft_79.xml"
     outfile = './test/aircraft_79.txt'
-    voc_to_txt(xml,outfile)
+    xml_to_txt(xml,outfile)
