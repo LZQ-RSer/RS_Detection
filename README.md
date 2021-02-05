@@ -6,7 +6,7 @@
 
 ----
 
-## 1. 样本格式
+## 1. 样本格式转化
 
 目标检测样本格式五花八门，常见的有voc、coco格式，也有自定义的txt、csv等格式。不管什么格式，无非就是记录下图像路径，图像长宽，每个目标的坐标位置，是否难检等信息。我这里统一转化为txt，并且整个数据集的目标写在一个txt里面，每一行记录一个图像的目标信息，格式如下：
 
@@ -26,11 +26,53 @@ import
 
 ### 1.3 voc_to_txt
 
+```python
+import sys
+import os
+import glob
+import xml.etree.ElementTree as ET
+def voc_to_txt(xml,outfile):
+    with open(outfile, "w") as new_f:
+        root = ET.parse(xml).getroot()
+        filename = root.find('filename').text
+        size = root.find('size')
+        width = size.find('width').text
+        height = size.find('height').text
+        new_f.write("%s %s,%s "%(filename,width,height))
+        for obj in root.findall('object'):
+            if obj.find('difficult')!=None:
+                difficult = obj.find('difficult').text
+                if int(difficult)==1:
+                    continue
+            obj_name = obj.find('name').text
+            bndbox = obj.find('bndbox')
+            left = bndbox.find('xmin').text
+            top = bndbox.find('ymin').text
+            right = bndbox.find('xmax').text
+            bottom = bndbox.find('ymax').text
+            new_f.write("%s,%s,%s,%s,%s " % (left, top, right, bottom,obj_name))
+        new_f.write('\n')
+if __name__ == '__main__':
+    xml = "./test/aircraft_79.xml"
+    outfile = './test/aircraft_79.txt'
+    voc_to_txt(xml,outfile)
+```
+
+
+
 ### 1.4 coco_to_txt
 
-### 1.5 txt_to_geojson
 
-### 1.6 txt_to_shp
+
+### 1.5 shp_to_txt
+
+在arcgis/Qgis中标注的数据可以直接转化为训练数据txt，这里顺便切图
+
+### 1.6 txt_to_geojson
+
+txt数据转成geojson格式方便web端加载展示
+
+### 1.7 txt_to_shp
 
 
 
