@@ -15,7 +15,7 @@ def xml_to_txt(xml,outfile):
         size = root.find('size')
         width = size.find('width').text
         height = size.find('height').text
-        new_f.write("%s %s,%s "%(filename,width,height))
+        new_f.write("%s %s,%s "%(filename,width,height))#注意空格
         for obj in root.findall('object'):
             if obj.find('difficult')!=None:
                 difficult = obj.find('difficult').text

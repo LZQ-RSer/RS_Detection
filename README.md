@@ -24,6 +24,12 @@ import
 
 ### 1.2 coco_to_voc
 
+```python
+import os
+```
+
+
+
 ### 1.3 voc_to_txt
 
 ```python
@@ -62,6 +68,41 @@ if __name__ == '__main__':
 
 ### 1.4 coco_to_txt
 
+```python
+import numpy as np
+import os
+import glob
+import json
+
+def json_to_txt(json_file,ourfile):
+    file = open(outfile,'w')
+    with open(json_file) as f:
+        lines = json.load(f)
+        filename = lines['imagePath']
+        width = lines['imageWidth']
+        height = lines['imageHeight']
+        file.write("%s %s,%s" % (filename, width, height))#注意空格
+        lines = lines["shapes"]
+        for line in lines:
+            list = line['points']
+            xmin = int(list[0][0])
+            ymin = int(list[0][1])
+            xmax = int(list[1][0])
+            ymax = int(list[1][1])
+            cla = line['label']
+            b = (xmin, ymin, xmax, ymax, cla)
+            file.write(' ' + ",".join([str(a) for a in b]))
+        file.write('\n')
+    file.close()
+
+if __name__ == '__main__':
+    json_file= './test/aircraft_79.json'
+    outfile = './test/airraft_79.json.txt'
+    json_to_txt(json_file,outfile)
+```
+
+
+
 
 
 ### 1.5 shp_to_txt
@@ -86,7 +127,7 @@ txt数据转成geojson格式方便web端加载展示
 
 ### 2.2 arcmap 可视化
 
-
+![image-20210205232226253](pic/arcmap)
 
 
 
