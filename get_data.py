@@ -260,7 +260,7 @@ def vis_label(txt,class_name,xz=False):
 
 def get_our_data():
     print(len(class_name))
-    outfile = 'all.txt'
+    outfile = './test/all.txt'
     list_file = open(outfile, 'w')
     labels = glob.glob('D:/study/data/rssrai2019_object_detection/train/labelTxt/labelTxt/*.txt')
     for label in labels:
@@ -296,10 +296,11 @@ if __name__ == '__main__':
                   "basketball-court", "airport","container-crane", "ground-track-field", "small-vehicle", "harbor",
                   "baseball-diamond", "tennis-court","roundabout", "storage-tank", "helipad"]
 
-    '''
+
     #（1）得到标准数据
     get_our_data()
-    '''
+    exit()
+
 
     '''
     #（2）可视化某个真值
@@ -308,6 +309,7 @@ if __name__ == '__main__':
     print(boxs[0])
     image = vis_label(boxs[980],class_name,True)
     # image.show()
+    
     image.save('sfds.png')
     exit()
     '''
