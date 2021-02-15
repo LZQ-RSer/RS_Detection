@@ -34,14 +34,15 @@ def read_txt(str_text):
 
 def txt_to_shp(img,txt,shapefile):
     line = read_txt(txt)[0]
-    line = line.split(' ')[2:]
+    ###根据txt中的格式选择
+    line = line.split(' ')[1:]
     box = [x.split(',') for x in line]
     #消除['']
     for b in box:
         if len(b)<=1:
             box.remove(b)
     ##未知行，5列
-    boxs = np.array(box).reshape(-1,5)
+    boxs = np.array(box).reshape(-1,6)
     dataset = gdal.Open(img)
     im_proj = dataset.GetProjection()##投影信息
     geo = dataset.GetGeoTransform()##地理坐标
@@ -87,8 +88,8 @@ def txt_to_shp(img,txt,shapefile):
 
     # 下面创建属性表
     # 先创建一个叫FieldID的整型属性
-    # oFieldID = ogr.FieldDefn('score',ogr.OFTReal)
-    # oLayer.CreateField(oFieldID,1)
+    oFieldID = ogr.FieldDefn('score',ogr.OFTReal)
+    oLayer.CreateField(oFieldID,1)
 
     # 再创建一个叫FeatureName的字符型属性，字符长度为50
     oFieldName = ogr.FieldDefn("classes", ogr.OFTString)
@@ -121,8 +122,9 @@ def txt_to_shp(img,txt,shapefile):
         poly1.AddGeometry(ring)
 
         oFeatureRectangle = ogr.Feature(oDefn)
-        # oFeatureRectangle.SetField(0, 0)
-        oFeatureRectangle.SetField(0, box[4])
+        oFeatureRectangle.SetField(1, box[-1])
+        oFeatureRectangle.SetField(0, box[-2])
+
         oFeatureRectangle.SetGeometry(poly1)
         oLayer.CreateFeature(oFeatureRectangle)
     if im_proj!='':
@@ -143,8 +145,11 @@ if __name__=='__main__':
     # txt = './test/clip.json.txt'
     # shapefile = './test/clip.shp'
     ###无投影的
-    img = './test/aircraft_79.jpg'
-    txt = './test/aircraft_79.txt'
-    shapefile = './test/aircraft_79.shp'
+    # img = './test/aircraft_79.jpg'
+    # txt = './test/aircraft_79.txt'
+    # shapefile = './test/aircraft_79.shp'
+    img = './test/beijing.tif'
+    txt = './test/beijing.txt'
+    shapefile = './test/beijing.shp'
 
     txt_to_shp(img,txt,shapefile)
